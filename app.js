@@ -1,57 +1,59 @@
-const singleProduct = document.querySelector(".add");
-const lsitOfProducts = document.querySelector(".products-added__wrapper");
+const productsList = document.querySelector(".products-list");
+const cartList = document.querySelector(".cart__wrapper");
 
-class CartProduct {
-  constructor() {
-    this.productsList = [];
+class Product {
+  constructor(productName, productPrice) {
+    this.createProduct(productName, productPrice);
   }
-  addNewProduct(product) {
-    const { productName, productPrice } = product;
-    this.productsList.push(
-      `Produkt: <b>${productName}</b> - o cenie ${productPrice} zł`
+  createProduct(name, price) {
+    const productLiWrapper = document.createElement("li");
+    productLiWrapper.classList.add("single-product__wrapper");
+
+    const productNameWrapper = document.createElement("p");
+    productNameWrapper.innerHTML = `Nazwa: ${name}`;
+
+    const productPriceWrapper = document.createElement("p");
+    productPriceWrapper.innerHTML = `Koszt to: ${price}$`;
+
+    const addProductToCartBtn = document.createElement("button");
+    addProductToCartBtn.innerHTML = "add to cart";
+    addProductToCartBtn.addEventListener("click", () =>
+      this.addProductToCart(name, price)
     );
+
+    productLiWrapper.appendChild(productNameWrapper);
+    productLiWrapper.appendChild(productPriceWrapper);
+    productLiWrapper.appendChild(addProductToCartBtn);
+
+    productsList.appendChild(productLiWrapper);
+  }
+
+  addProductToCart(productName, productPrice) {
+    const cartProductLi = document.createElement("li");
+
+    const cartProductNameWrapper = document.createElement("p");
+    cartProductNameWrapper.innerHTML = productName;
+
+    const cartProductPriceWrapper = document.createElement("p");
+    cartProductPriceWrapper.innerHTML = productPrice;
+
+    const deleteProductFromCartBtn = document.createElement("button");
+    deleteProductFromCartBtn.innerHTML = "Delete";
+
+    deleteProductFromCartBtn.addEventListener("click", () =>
+      this.removeProductFromCart(cartProductLi)
+    );
+
+    cartProductLi.appendChild(cartProductNameWrapper);
+    cartProductLi.appendChild(cartProductPriceWrapper);
+    cartProductLi.appendChild(deleteProductFromCartBtn);
+    cartList.appendChild(cartProductLi);
+  }
+  removeProductFromCart(cartProductLi) {
+    cartProductLi.parentNode.removeChild(cartProductLi);
   }
 }
 
-const availableProduct = new CartProduct();
-availableProduct.addNewProduct({ productName: " Ogórek", productPrice: "1" });
-availableProduct.addNewProduct({ productName: " Papryka", productPrice: "2" });
-availableProduct.addNewProduct({ productName: " Dżem", productPrice: "3" });
-
-availableProduct.productsList.forEach((product) => {
-  const newProduct = document.createElement("li");
-  newProduct.className = "newproduct";
-  const addProductToBasket = document.createElement("button");
-  addProductToBasket.innerHTML = "Dodaj do koszyka";
-  newProduct.innerHTML = product;
-
-  singleProduct.appendChild(newProduct);
-  newProduct.appendChild(addProductToBasket);
-
-  const addProduct = () => {
-    //     const newElementP = document.createElement("p");
-    //     newElementP.innerHTML = newProduct.textContent;
-    //     document.querySelector(".products-added__wrapper").appendChild(newElementP);
-
-    const newLiElement = document.createElement("li");
-    newLiElement.className = "newLiElement";
-    const removeProductFromBasket = document.createElement("button");
-    removeProductFromBasket.innerHTML = "usun z koszyka";
-
-    // removeProductFromBasket.addEventListener("click", () =>
-    //     this.removeProduct(newLiElement,productName))
-
-    newLiElement.innerHTML = product;
-    lsitOfProducts.appendChild(newLiElement);
-    newLiElement.appendChild(removeProductFromBasket);
-  };
-  // removeProduct(newLiElement,productName){
-  //     newLiElement.parentNode.removeChild(newLiElement);
-  //     const productIndex = productsList.indexOf(productName);
-  //     productsList.splice(productIndex,1);
-
-  // }
-  // };
-
-  addProductToBasket.addEventListener("click", addProduct);
-});
+new Product("Ziemniaki", 2);
+new Product("Pomidory", 3);
+new Product("Marchew", 1);
